@@ -84,3 +84,9 @@ Create a POD file to define your application
 .\kubectl config set-cluster dave-test-k8scluster --insecure-skip-tls-verify=true --server=https://dave-test--dave-test-k8sclu-3d7f97-d617786c.hcp.westeurope.azmk8s.io:443
 .\kubectl get pods
 ```
+
+## Get Public ips of a Azure Cluster
+Note that managed k8s Clusters like the one on Azure do not need a manual ip management.
+```
+az network public-ip show --resource-group dave-test-k8scluster --name dave-test-k8scluster --query ipAddress --output tsv
+```

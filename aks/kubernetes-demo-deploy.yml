@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kubernetes-demo-deployment
+  labels:
+    app: kubernetes-demo-app
+    type: demo
 spec:
   selector:
     matchLabels:
