@@ -16,4 +16,13 @@ if ($PSVersionTable.PSEdition -eq 'Desktop' -and (Get-Module -Name AzureRM -List
 }
 ```
 
+## Install KubeCtl Module
+
+Install-Script -Name install-kubectl -Scope CurrentUser -Force
+install-kubectl.ps1 -DownloadLocation [Where you want to have the exe file]
+
+
+## Install Azure Module
+
+
 > More info under : https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-5.2.0
