@@ -2,10 +2,10 @@
 
 ## Prerequisite
 
-###Install Docker
+### Install Docker
 https://docs.docker.com/get-docker/
 
-###Install Docker Compose
+### Install Docker Compose
 https://docs.docker.com/compose/install/
 
 ### Install Node, yarn
@@ -45,9 +45,20 @@ docker run -p 8080:8080 --name kubernetes-demo-backend valtech/kubernetes-demo-b
 Access: http://localhost:8080/api
 ```
 
+## kubernetes-demo-proxy
+
+Build proxy docker image
+```
+cd kubernetes-demo-proxy
+docker build . -t valtech/kubernetes-demo-proxy
+
+docker run -p 8080:8080 --name kubernetes-demo-proxy valtech/kubernetes-demo-proxy
+Access: http://localhost:8080
+```
+
 ## docker-compose
 
-Run all in once by docker-compose (Requires building FE and BE docker images upfront)
+Run all in once by docker-compose (Requires building FE/BE and proxy docker images upfront)
 
 ```
 docker-compose up -d

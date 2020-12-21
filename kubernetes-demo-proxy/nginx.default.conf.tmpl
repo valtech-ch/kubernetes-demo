@@ -1,0 +1,47 @@
+# Catch-all-unknown (needs to be the first vhost)
+#
+server {
+  listen 8080;
+  listen [::]:8080;
+  server_name _; # This is just an invalid value which will never trigger on a real hostname.
+
+  server_name_in_redirect off;
+  deny all;
+}
+
+#
+# This section deals with inbound traffic redirects to Kubernetes Backend
+#
+server {
+  listen 8080;
+  listen [::]:8080;
+  server_name ${BASE_FQDN};
+  include /etc/nginx/conf.d/nginx-gzip.conf;
+
+  # this is the internal Docker DNS, cache only for 30s
+  resolver 127.0.0.11 valid=30s;
+
+  # Redirects all backend requests to the backend container
+  location ^~ /api {
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host:$server_port;
+    proxy_set_header X-Forwarded-Server $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    set $upstream http://kubernetes-demo-backend:8080;
+    proxy_pass $upstream;
+    proxy_redirect ~^http://kubernetes-demo-backend/(.*) http://${BASE_FQDN}:8080/$1;
+  }
+
+  # Everything else redirects to the frontend
+  location / {
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host:$server_port;
+    proxy_set_header X-Forwarded-Server $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    set $upstream http://kubernetes-demo-frontend:8080;
+    proxy_pass $upstream;
+    proxy_redirect ~^http://kubernetes-demo-frontend:8080/(.*) http://${BASE_FQDN}:8080/$1;
+  }
+}
