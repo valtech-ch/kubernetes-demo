@@ -8,9 +8,24 @@ https://docs.docker.com/get-docker/
 ###Install Docker Compose
 https://docs.docker.com/compose/install/
 
+### Install Node, yarn
+
+
 ## kubernetes-demo-frontend
 
-TODO
+Build application:
+```
+cd kubernetes-demo-frontend
+yarn install
+yarn build
+```
+
+Build docker image and run it:
+```
+docker build -t valtech/kubernetes-demo-frontend .
+
+docker run -p 8080:8080 --name kubernetes-demo-frontend valtech/kubernetes-demo-frontend
+```
 
 ## kubernetes-demo-backend
 

@@ -5,9 +5,10 @@ export default function Home() {
 const [loaded, setLoaded] = useState(false)
 const [data, setData] = useState(null)
 const [error, setError] = useState(null)
+const backendBaseURL = process.env.REACT_APP_BACKEND_BASE_URL
 
     useEffect(() => {
-        fetch("api")
+        fetch(`${backendBaseURL}/api`)
         .then((res) => res.text())
         .then((result) => {
             setLoaded(true)
@@ -16,7 +17,7 @@ const [error, setError] = useState(null)
             setLoaded(true)
             setError(error)
         })
-    }, [])
+    }, [backendBaseURL])
 
     if (error) {
         return (
