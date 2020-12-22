@@ -5,7 +5,7 @@ networks:
 
 services:
   kubernetes-demo-proxy:
-    image: valtech/kubernetes-demo-proxy
+    image: valtechchregistry.azurecr.io/kubernetes-demo-proxy
     container_name: kubernetes-demo-proxy
     networks:
       - services
@@ -15,7 +15,7 @@ services:
      - 8080:8080
 
   kubernetes-demo-backend:
-    image: valtech/kubernetes-demo-backend
+    image: valtechchregistry.azurecr.io/kubernetes-demo-backend
     container_name: kubernetes-demo-backend
     networks:
       - services
@@ -27,7 +27,7 @@ services:
 #      - .:/var/kubernetes-demo-backend
 
   kubernetes-demo-frontend:
-    image: valtech/kubernetes-demo-frontend
+    image: valtechchregistry.azurecr.io/kubernetes-demo-frontend
     container_name: kubernetes-demo-frontend
     networks:
       - services

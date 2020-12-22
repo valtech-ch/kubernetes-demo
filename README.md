@@ -22,9 +22,9 @@ yarn build
 
 Build docker image and run it:
 ```
-docker build -t valtech/kubernetes-demo-frontend .
+docker build -t valtechchregistry.azurecr.io/kubernetes-demo-frontend .
 
-docker run -p 8080:8080 --name kubernetes-demo-frontend valtech/kubernetes-demo-frontend
+docker run -p 8080:8080 --name kubernetes-demo-frontend valtechchregistry.azurecr.io/kubernetes-demo-frontend
 ```
 
 ## kubernetes-demo-backend
@@ -39,9 +39,9 @@ cd kubernetes-demo-backend
 
 Build docker image and run it:
 ```
-docker build . -t valtech/kubernetes-demo-backend
+docker build . -t valtechchregistry.azurecr.io/kubernetes-demo-backend
 
-docker run -p 8080:8080 --name kubernetes-demo-backend valtech/kubernetes-demo-backend
+docker run -p 8080:8080 --name kubernetes-demo-backend valtechchregistry.azurecr.io/kubernetes-demo-backend
 Access: http://localhost:8080/api
 ```
 
@@ -50,9 +50,9 @@ Access: http://localhost:8080/api
 Build proxy docker image
 ```
 cd kubernetes-demo-proxy
-docker build . -t valtech/kubernetes-demo-proxy
+docker build . -t valtechchregistry.azurecr.io/kubernetes-demo-proxy
 
-docker run -p 8080:8080 --name kubernetes-demo-proxy valtech/kubernetes-demo-proxy
+docker run -p 8080:8080 --name kubernetes-demo-proxy valtechchregistry.azurecr.io/kubernetes-demo-proxy
 Access: http://localhost:8080
 ```
 
