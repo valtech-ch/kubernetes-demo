@@ -1,17 +1,31 @@
-# PowerShell installs
+# Prerequistis
+Powershell stuff
 
 ## Install KubeCtl Module
-
 ```
 Install-Script -Name install-kubectl -Scope CurrentUser -Force
 install-kubectl.ps1 -DownloadLocation [Where you want to have the exe file]
 ```
 
 ## Install AZ Cli
-
 ```
 Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
 ```
+
+## Install Helm
+To install the ingress images we use Helm.
+
+Get the latest version for your Architecture from ```https://github.com/helm/helm/releases``` and decompress the content to the same directy as Kubectl above
+
+## Tips/tricks
+To make life easier, create an alias for kubectl
+```
+Set-Alias -Name k -Value [PathToKubeCtrl]\kubectl
+```
+
+If you work a lot with Helm, also create a alias h for Helm.
+
+Alternative is to add the location where kubectl and helm are kept to the system path env.
 
 # Create a new Azure Registry
 ```
@@ -21,6 +35,7 @@ Attach the Regsitry to the k8s Cluster
 ```
 az aks update -n dave-test-k8scluster -g dave-test-k8scluster --attach-acr valtechchregistry
 ```
+
 
 # Push an image to Azure Registry
 
@@ -70,23 +85,80 @@ Use this now in the deploy
 
 # Kbernetes 
 
-Create a POD file to define your application
+First thing to do, is to setup the kubtctl config file so that you can access the cluster.
+
+Vars you have to know before stating:
+- [CLUSTERNAME] Exemple: dave-test-k8scluster
+- [RESOURCEGROUPNAME] Exemple: dave-test-k8scluster
+- [SERVERURL] Exemple: https://dave-test--dave-test-k8sclu-3d7f97-d617786c.hcp.westeurope.azmk8s.io:443
+- [NAMESPACE] any simple string to identify your space. Exemple: mySpace
+- [SUBSCRIPTIONID] Subscription ID. Exemple: 3d7f9720-f38e-447b-ba93-470416489aa1
+
+## Get access
+
+### Use your account setup the connection to the cluster
 
 ```
-.\kubectl.exe apply -f .\admin-sa.yml
-.\kubectl.exe apply -f .\admin-rbac.yml
+az login
+az aks Get-Credentials --name "[CLUSTERNAME]" --resource-group "[RESOURCEGROUPNAME]"
+```
+By doing so you shoud now have in you personal user a folder called .kube with a config file. Ex: "C:\Users\daniel.finck\.kube\config"
+Inside you can find the Access token and more details.
+
+If your account is linked to multiple subscriptions, add the subscription parameter to the call:
+
+```
+az login
+az aks Get-Credentials --name "[CLUSTERNAME]" --resource-group "[RESOURCEGROUPNAME]" --subscription [SUBSCRIPTIONID]
 ```
 
-## Configure Kubectl to connect to a specific cluster with a given user
+Also set the default SubScription for your account via 
 ```
-.\kubectl config set-credentials my-service-account1 --token=TBD
-.\kubectl config set-context my-service-account1-context --cluster=dave-test-k8scluster --user=my-service-account1
-.\kubectl config set-cluster dave-test-k8scluster --insecure-skip-tls-verify=true --server=https://dave-test--dave-test-k8sclu-3d7f97-d617786c.hcp.westeurope.azmk8s.io:443
-.\kubectl get pods
+az account set -s [SUBSCRIPTIONID]
 ```
 
-## Get Public ips of a Azure Cluster
-Note that managed k8s Clusters like the one on Azure do not need a manual ip management.
+## Setup
+Create a namespace for all your stuff
 ```
-az network public-ip show --resource-group dave-test-k8scluster --name dave-test-k8scluster --query ipAddress --output tsv
+kubectl create namespace [NAMESPACE]
 ```
+And set the namespace as default
+```
+kubectl config set-context --current --namespace=[NAMESPACE]
+```
+
+## Start your pods
+```
+kubectl apply -f kubenetes-demo-be.yml
+kubectl apply -f kubenetes-demo-fe.yml
+```
+Check if all pods are runing
+```
+kubctl get all
+```
+
+## Configure ingress
+
+Add the ingress-nginx repository
+```
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+```
+
+Use Helm to deploy an NGINX ingress controller
+```
+helm install nginx-ingress ingress-nginx/ingress-nginx `
+    --namespace [NAMESPACE] `
+    --set controller.replicaCount=2 `
+    --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux
+```
+
+Run the ingress rooting
+```
+kubectl apply -f kubenetes-demo-ingress.yml
+kubctl get all
+```
+
+In this list you should get a Public IP for the ingress service. Note that the Public IP make take some time to be generated.
+

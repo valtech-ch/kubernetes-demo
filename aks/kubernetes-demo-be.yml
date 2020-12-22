@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-demo-be-deployment
+  labels:
+    app: kubernetes-demo-app
+    type: be
+spec:
+  selector:
+    matchLabels:
+      app: kubernetes-demo-app
+      type: be
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubernetes-demo-app
+        type: be
+    spec:
+      containers:
+      - name: kubernetes-demo-backend
+        image: valtechchregistry.azurecr.io/kubernetes-demo-backend
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: valtechchregistrysecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-demo-service-be
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    app: kubernetes-demo-app
+    type: be
