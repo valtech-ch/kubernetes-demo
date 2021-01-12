@@ -2,7 +2,7 @@
 
 - [12-factor](https://12factor.net) application
 - Container versus Virtual Machines (VM)
-- Docker and [Docker Compose](https://docs.docker.com/compose/)
+- Docker and Docker Compose
 - Container orchestration
 - Introduction into Kubernetes and OpenShift
 
