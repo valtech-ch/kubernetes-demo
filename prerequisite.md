@@ -4,6 +4,7 @@
 - Install Docker Compose
 - Install kubectl
 - Install Node.js, NPM, Yarn
+- Install Java 11, Gradle
 
 ## Installation Manual for Windows
 
@@ -86,3 +87,79 @@ sudo apt-get update && sudo apt-get install yarn
 ```console
 yarn -v 
 ```
+
+## Installation Manual for Mac
+
+### Install Docker https://docs.docker.com/get-docker/
+
+- Verify docker is up and running
+
+```console
+docker ps
+```
+
+### Install Docker Compose
+
+```console
+brew install docker-compose
+```
+
+- Verify docker compose is available
+
+```console
+docker-compose --version
+```
+
+### Install Kubectl
+
+```console
+brew install kubectl
+```
+
+- Verify kubectl is available
+
+```console
+kubectl version --client
+```
+
+### Install Node.js & NPM https://nodejs.org/en/
+
+```console
+brew install node
+```
+
+- Verify node is installed with version > 14
+
+```console
+node -v 
+```
+
+- install yarn package manager
+
+```console
+brew install yarn
+```
+
+- Verify yarn is installed with version > 1.22
+
+```console
+yarn -v 
+```
+
+### Install Gradle
+
+```console
+brew install gradle
+```
+
+- Verify gradle is installed
+
+```console
+gradle --version
+```
+
+### Install Java JDK 11
+
+https://sdkman.io/install
+or
+https://www.oracle.com/ch-de/java/technologies/javase-jdk11-downloads.html
