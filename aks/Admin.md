@@ -8,18 +8,24 @@ az aks get-credentials --resource-group dave-test-k8scluster --name dave-test-k8
 
 # Create a new namespace and account
 
+Env vars to know before continuing
 - [USERNAME]
-- 
+- [SUBSCRIPTIONID]
+- [RESOURCEGROUPNAME]
 
 ```
 kubectl create namespace [USERNAME]-ns
 az ad sp create-for-rbac --skip-assignment --name [USERNAME]
 az role assignment create --assignee <appId> --role Contributor --scope /subscriptions/[SUBSCRIPTIONID]/resourceGroups/[RESOURCEGROUPNAME]
 kubectl get secret --namespace [USERNAME]-ns
-kubectl describe secret default-token-8wdbx --namespace [USERNAME]-ns
+kubectl describe secret [TokenID From User] --namespace [USERNAME]-ns
 ```
 > Store pwd as this can not be revealed again
 
+
+
+
+# OLD
 ```
 .\kubectl config set-credentials my-service-account1 --token=TBD
 .\kubectl config set-context my-service-account1-context --cluster=[CLUSTERNAME] --user=my-service-account1
