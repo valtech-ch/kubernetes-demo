@@ -2,6 +2,7 @@
 
 - Install Docker
 - Install Docker Compose
+- Install kubectl
 - Install Node.js, NPM, Yarn
 
 ## Installation Manual for Windows
@@ -42,6 +43,20 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ```console
 docker-compose --version
+```
+
+### Install Kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+```console
+curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+```
+
+- Verify kubectl is available
+
+```console
+kubectl version --client
 ```
 
 ### Install Node.js & NPM https://nodejs.org/en/
